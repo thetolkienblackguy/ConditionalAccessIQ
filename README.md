@@ -135,7 +135,7 @@ Connect-MgGraph -Scopes @(
      - Mail.Send (Application, if using email - see note below)
    - Grant admin consent
 
-   > **Note on Mail.Send Permission**: When configuring Mail.Send, you must specify which mailbox the application can access. See [Microsoft's guidance on limiting mailbox access](https://learn.microsoft.com/en-us/graph/auth-limit-mailbox-access) for configuration details.
+   > **Note on Mail.Send Permission**: When configuring Mail.Send, you should specify which mailbox the application can access. See [Microsoft's guidance on limiting mailbox access](https://learn.microsoft.com/en-us/graph/auth-limit-mailbox-access) for configuration details.
 
    ![Graph API Permissions](https://github.com/thetolkienblackguy/ConditionalAccessIQ/blob/main/Imgs/graph_api_permissions.png)
 
