@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}}</title>
+    {{STYLES}}
+</head>
+<body>
+    <div class="container">
+        <h1>{{DISPLAY_NAME}}</h1>
+        <h2>Policy Information</h2>
+        <table>
+            <tr><th>Display Name</th><td>{{DISPLAY_NAME}}</td></tr>
+            <tr><th>Policy ID</th><td>{{POLICY_ID}}</td></tr>
+            <tr><th>Policy Version</th><td>{{VERSION}}</td></tr>
+            <tr><th>{{DATE_HEADER}}</th><td>{{ACTIVITY_DATE}}</td></tr>
+            <tr><th>{{BY_HEADER}}</th><td>{{MODIFIED_BY}}</td></tr>
+        </table>
+        <h2>Summary of Changes</h2>
+        <p class="summary">Total changes: {{TOTAL_CHANGES}}</p>
+        <h2>Detailed Changes</h2>
+        {{CHANGES_TABLE}}
+    </div>
+</body>
+</html>
