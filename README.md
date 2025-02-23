@@ -255,7 +255,7 @@ The tool provides several output formats:
 
 **Audit Log Access**
 
-- Limited to 30-day history (Microsoft Graph API limitation)
+- Limited to 30-day history
 - Regular monitoring recommended for complete history
 
 ## License
