@@ -39,6 +39,14 @@ a:hover {
     margin: 4px 2px; 
     cursor: pointer; 
 }
+.tenant-info {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+    color: #666;
+    border-left: 4px solid #0066cc;
+}
 .footer { 
     margin-top: 40px; 
     border-top: 1px solid #ccc; 
