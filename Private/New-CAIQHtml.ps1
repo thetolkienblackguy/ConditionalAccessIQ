@@ -58,6 +58,7 @@ Function New-CAIQHtml {
         $policy_list = [System.Text.StringBuilder]::new()
         foreach ($report in $policyReports) {
             [void]$policy_list.AppendLine("<li><a href=`"#$($report.Policy)`">$($report.Policy)</a></li>")
+        
         }
         
         # Build detailed reports
@@ -89,9 +90,11 @@ Function New-CAIQHtml {
     } Process {
         # Replace template tokens
         $html = $main_template
+        $tenant_info = Get-CAIQTenantInfo
 
         # Replace the tokens
         $tokens = @{}
+        $tokens["TENANT_NAME"] = "$($tenant_info.DisplayName) ($($tenant_info.Id))"
         $tokens["TITLE"] = $title
         $tokens["STYLES"] = "<style>$main_styles</style>"
         $tokens["RESTORE_NOTICE"] = 'To restore a Conditional Access Policy using the downloaded JSON, please refer to this article: <a href="https://techcommunity.microsoft.com/t5/microsoft-entra/conditional-access-upload-policy-file-preview/m-p/3835296" target="_blank">Conditional Access: Upload Policy File (Preview)</a>'
