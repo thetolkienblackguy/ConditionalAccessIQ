@@ -209,7 +209,7 @@ Invoke-CAIQ -OutputPath $PWD
 # Use the html report as the body of the email
 $html = Get-Content "$($PWD)\Conditional_Access_Intelligence.html" -Raw
 
-# Optionally email the report
+# Email the report
 Send-CAIQMailMessage -To "security-team@contoso.com" -From "reports@contoso.com" -Subject "Daily CA Changes Report" -Body $html -Attachments "$($PWD)\Conditional_Access_Intelligence.html"
 ```
 
