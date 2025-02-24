@@ -29,7 +29,7 @@ Every policy change is documented with an interactive HTML report that shows:
 
 ![Policy Information View](https://github.com/thetolkienblackguy/ConditionalAccessIQ/blob/main/Imgs/policy_information.png)
 
-> **Version:** 0.0.1  
+> **Version:** 0.0.2  
 > **Author:** Gabriel Delaney ([GitHub](https://github.com/thetolkienblackguy))  
 > **Company:** Phoenix Horizons LLC  
 
@@ -204,7 +204,7 @@ Import-Module ConditionalAccessIQ
 Connect-MgGraph -ClientId $client_id -CertificateThumbprint "cert-thumbprint" -TenantId $tenant_id
 
 # Run report for last 24 hours
-Invoke-CAIQ
+Invoke-CAIQ -InvokeHtml:$false
 
 # The report path
 $html_path = "$($PWD)\ConditionalAccessIQ\Conditional_Access_Intelligence.html"
