@@ -144,9 +144,6 @@ Function Invoke-CAIQ {
                     Export-CAIQJson @export_json_params 
                     Invoke-CAIQLogging -Message "Policy $($policy_display_name) has been saved to $($policy_path) successfully" -ForegroundColor Green
 
-                    # Write the policy to the console
-                    Invoke-CAIQLogging -Message "Policy $($policy_display_name) has been saved to $($policy_path)"
-
                     # Checking if this is a newly created policy
                     Invoke-CAIQLogging -Message "Checking if this is a newly created policy"
                     $add_audit_logs = Get-CAIQDirectoryAuditLog -PolicyId $policy_id -Action "Add"
