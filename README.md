@@ -216,7 +216,7 @@ Send-CAIQMailMessage -To "security-team@contoso.com" -From "reports@contoso.com"
 You can schedule this script using:
 
 - Windows Task Scheduler
-- Azure Automation
+- ~~Azure Automation~~ Currently not functioning.  
 
 ## Sample Output
 
