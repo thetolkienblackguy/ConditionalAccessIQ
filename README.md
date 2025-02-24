@@ -189,7 +189,7 @@ Invoke-CAIQ -InvokeHtml:$false
 Send email notifications about policy changes:
 
 ```powershell
-Send-CAIQMailMessage -To "security-team@contoso.com" -From "reports@contoso.com" -Subject "CA Policy Changes" -Body "Please review the attached report." -Attachments "C:\CAIQReports\CA_Changes_Report.html"
+Send-CAIQMailMessage -To "jdoe@contoso.com" -From "thetolkienblackguy@contoso.com" -Subject "Daily CA Changes Report" -Subject "CA Policy Changes" -Body "Please review the attached report." -Attachments "$($PWD)\ConditionalAccessIQ\CA_Changes_Report.html"
 ```
 
 ### Recommended Automation
@@ -204,19 +204,28 @@ Import-Module ConditionalAccessIQ
 Connect-MgGraph -ClientId $client_id -CertificateThumbprint "cert-thumbprint" -TenantId $tenant_id
 
 # Run report for last 24 hours
-Invoke-CAIQ -OutputPath $PWD
+Invoke-CAIQ
 
-# Use the html report as the body of the email
-$html = Get-Content "$($PWD)\Conditional_Access_Intelligence.html" -Raw
+# The report path
+$html_path = "$($PWD)\ConditionalAccessIQ\Conditional_Access_Intelligence.html"
+
+# If the report exists get the content of it, if not, exit. 
+If ((Test-Path $html_path -PathType Leaf)) {
+    $html = Get-Content -Path $html_path -Raw
+
+} Else {
+    Exit
+
+}
 
 # Email the report
-Send-CAIQMailMessage -To "security-team@contoso.com" -From "reports@contoso.com" -Subject "Daily CA Changes Report" -Body $html -Attachments "$($PWD)\Conditional_Access_Intelligence.html"
+Send-CAIQMailMessage -To "jdoe@contoso.com" -From "thetolkienblackguy@contoso.com" -Subject "Daily CA Changes Report" -Body $html -Attachments $html_path
 ```
 
 You can schedule this script using:
 
 - Windows Task Scheduler
-- ~~Azure Automation~~ Currently not functioning.  
+- Azure Automation  
 
 ## Sample Output
 
