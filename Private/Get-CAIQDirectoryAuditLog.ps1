@@ -58,10 +58,16 @@ Function Get-CAIQDirectoryAuditLog {
         [string]$EndDate = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
     
     )
+    # Get the Microsoft Graph endpoint, if not already set
+    If (!$script:graph_endpoint) {
+        $script:graph_endpoint = Get-CAIQGraphEndpoint
+    
+    }
+
     # Build the filter
     $filter = "ActivityDisplayName eq '$action conditional access policy' and targetResources/any(t:t/id eq '$policyId') and ActivityDateTime gt $startDate and ActivityDateTime lt $endDate"
     $invoke_mg_params = @{}
-    $invoke_mg_params['Uri'] = "https://graph.microsoft.com/v1.0/auditLogs/directoryAudits?`$filter=$filter"
+    $invoke_mg_params['Uri'] = "$script:graph_endpoint/v1.0/auditLogs/directoryAudits?`$filter=$filter"
     $invoke_mg_params['Method'] = "GET"
     $invoke_mg_params['OutputType'] = "PSObject"
 

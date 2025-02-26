@@ -76,6 +76,12 @@ Function Send-CAIQMailMessage {
 
     )
     Begin {
+        # Get the Microsoft Graph endpoint, if not already set
+        If (!$script:graph_endpoint) {
+            $script:graph_endpoint = Get-CAIQGraphEndpoint
+        
+        }
+
         # Creating parent message hash table
         $mail_message = @{}
         $mail_message["message"] = ""
@@ -120,7 +126,7 @@ Function Send-CAIQMailMessage {
 
         # Setting the Invoke-MgGraphRequest parameters
         $invoke_graph_params = @{}
-        $invoke_graph_params["Uri"] = "https://graph.microsoft.com/v1.0/users/$from/sendMail"
+        $invoke_graph_params["Uri"] = "$script:graph_endpoint/v1.0/users/$from/sendMail"
         $invoke_graph_params["Method"] = "Post"
         $invoke_graph_params["Body"] = $mail_message | ConvertTo-Json -Depth 4
         $invoke_graph_params["ContentType"] = "application/json"

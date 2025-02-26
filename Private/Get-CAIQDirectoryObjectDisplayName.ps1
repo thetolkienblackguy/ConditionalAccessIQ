@@ -29,6 +29,12 @@ function Get-CAIQDirectoryObjectDisplayName {
     
     )
     Begin {
+        # Get the Microsoft Graph endpoint, if not already set
+        If (!$script:graph_endpoint) {
+            $script:graph_endpoint = Get-CAIQGraphEndpoint
+        
+        }
+
         # Invoke-MgGraphRequest parameters
         $invoke_mg_params = @{}
         $invoke_mg_params["Method"] = "GET"
@@ -38,7 +44,7 @@ function Get-CAIQDirectoryObjectDisplayName {
         $guid_regex = "^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$"
 
         # URI to call Microsoft Graph
-        $uri = "https://graph.microsoft.com/v1.0{0}{1}"
+        $uri = "$script:graph_endpoint/v1.0{0}{1}"
     } Process {
         # If the directoryObjectId is a GUID
         If ($directoryObjectId -match $guid_regex) {

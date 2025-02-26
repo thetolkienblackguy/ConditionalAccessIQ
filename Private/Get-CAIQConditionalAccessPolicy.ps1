@@ -55,7 +55,12 @@ Function Get-CAIQConditionalAccessPolicy {
         $PSDefaultParameterValues["ConvertTo-Json:Depth"] = 10
         $PSDefaultParameterValues["Invoke-MgGraphRequest:Method"] = "GET"
         $PSDefaultParameterValues["Invoke-MgGraphRequest:OutputType"] = "PSObject"
-
+        
+        # Get the Microsoft Graph endpoint, if not already set
+        If (!$script:graph_endpoint) {
+            $script:graph_endpoint = Get-CAIQGraphEndpoint
+        
+        }
     } Process {
         # Setting the filter based on the parameter set
         If ($PSCmdlet.ParameterSetName -eq "ConditionalAccessPolicyId") {
@@ -68,7 +73,7 @@ Function Get-CAIQConditionalAccessPolicy {
         Try {
             Do {
                 # Get all the policies
-                $r = Invoke-MgGraphRequest -Uri "https://graph.microsoft.com/$apiVersion/identity/conditionalAccess/policies?`$filter=$($filter)"
+                $r = Invoke-MgGraphRequest -Uri "$script:graph_endpoint/$($apiVersion)/identity/conditionalAccess/policies?`$filter=$($filter)"
                 
                 # Output the policies
                 If ($flattenOutput) {
