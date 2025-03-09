@@ -13,12 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.2] - 2025-02-21
 
-### Added
+### Changed
 
-- Initial public release
-- Core functionality for tracking Conditional Access policy changes
-- HTML report generation
-- Email notification capabilities
-- Historical version tracking
-- User-friendly policy comparison
-- Microsoft Graph integration
+- Started usign changelog
