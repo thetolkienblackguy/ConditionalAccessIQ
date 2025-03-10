@@ -1,98 +1,111 @@
 Function Invoke-CAIQBreakGlassAssessment {
     <#
         .SYNOPSIS
-        This function tests if a user is excluded from a conditional access policy.
+        Creates a dashboard showing break glass accounts and their conditional access policy exclusions.
 
         .DESCRIPTION
-        This function tests if a user is excluded from a conditional access policy.
-    
-        .PARAMETER BreakGlassAccount
-        The break glass account to test.
+        It runs an assessment of whether specified break glass accounts are excluded from all 
+        Conditional Access policies and generates an HTML report with the findings.
 
-        .PARAMETER Select
-        The properties to select from the policy object.
+        .PARAMETER BreakGlassAccount
+        The break glass accounts to check. This can be either the User Principal Name (UPN) or Object ID.
+
+        .PARAMETER OutputPath
+        The path where the HTML report will be saved.
+
+        .PARAMETER FileName
+        The name of the HTML report file.
+
+        .PARAMETER Title
+        The title of the HTML report.
+
+        .PARAMETER Logfile
+        The path to the log file.
+
+        .PARAMETER InvokeHtml
+        If specified, opens the HTML report after creation.
 
         .EXAMPLE
-        Invoke-CAIQBreakGlassAssessment -BreakGlassAccount "user@domain.com"
+        Invoke-CAIQBreakGlassAssessment -UserId "breakglass@contoso.com","emergency@contoso.com"
+
+        .EXAMPLE
+        Invoke-CAIQBreakGlassAssessment -UserId "breakglass@contoso.com" -OutputPath "C:\Reports" -InvokeHtml
 
         .INPUTS
         System.String[]
+        System.String
+        System.Automation.SwitchParameter
 
         .OUTPUTS
         System.Object
-
 
     #>
     [CmdletBinding()]
     [OutputType([System.Object])]
     param (
-        [Parameter(Mandatory=$true)]
-        #[Alias("BG","BreakGlassAccount","Id","Upn")]
-        [string[]]$Userid,
+        [Parameter(Mandatory=$true, Position=0)]
+        [Alias("BG","BreakGlassAccounts","Id","Upn")]
+        [string[]]$UserId,
         [Parameter(Mandatory=$false)]
-        [string[]]$Select = ("Id","DisplayName","Description","State")
+        [string]$OutputPath = "$($PWD)\ConditionalAccessIQ",
+        [Parameter(Mandatory=$false)]
+        [string]$FileName = "BreakGlass_Assessment_Report.html",
+        [Parameter(Mandatory=$false)]
+        [string]$Title = "Break Glass CA Policy Exclusion Report",
+        [Parameter(Mandatory=$false)]
+        [string]$Logfile = "$($outputPath)\Logs\Invoke-CAIQBreakGlassAssessment_$(Get-Date -Format "yyyy-MM-dd_HH-mm-ss").log",
+        [Parameter(Mandatory=$false)]
+        [switch]$InvokeHtml
     
     )
     Begin {
-        #Setting the default parameter values
-        $PSDefaultParameterValues["Add-Member:MemberType"] = "NoteProperty"
-        $PSDefaultParameterValues["Add-Member:Force"] = $true
-
-        #Creating a list to store the output
-        $output_obj = [System.Collections.Generic.List[PSObject]]::new()
-
+        # Setting the default parameter values
+        $PSDefaultParameterValues = @{}
+        $PSDefaultParameterValues["Invoke-CAIQLogging:Logfile"] = $Logfile
+        $PSDefaultParameterValues["Invoke-CAIQLogging:WriteOutput"] = $true
+    
     } Process {
-        #Getting the policies
-        $policies = Get-CAIQConditionalAccessPolicy
-
-        #Adding the break glass account and excluded from policy to the policy object
-        $policies | Add-Member -Name "BreakGlassAccount" -Value ""
-        $policies | Add-Member -Name "ExcludedFromPolicy" -Value $false
-
+        # Run the break glass assessment
+        Invoke-CAIQLogging -Message "Starting break glass CAIQ exclusion assessment" 
+        
         Try {
-            #Looping through each break glass account
-            foreach ($id in $userid) {
-                #Getting the user object for the break glass account
-                $user = Get-CAIQUser -UserId $id
+            # Run the assessment
+            $assessment_results = Get-CAIQBreakGlassAssessment -UserId $userId
+            Invoke-CAIQLogging -Message "Break glass assessment completed successfully" -ForegroundColor Green
 
-                #Getting the user's group memberships
-                $member_of = Get-CAIQUserMemberOf -UserId $user.id -Recursive
-
-                #Looping through each policy
-                foreach ($policy in $policies) {
-                    #Creating a new policy object  
-                    $policy_obj = $policy | Select-Object ($select + @("BreakGlassAccount","ExcludedFromPolicy"))
-                    $policy_obj.BreakGlassAccount = $user.userPrincipalName
-
-                    #Getting the group and user exclusions for the conditional access policy
-                    $excluded_groups = $policy.conditions.users.excludeGroups
-                    $excluded_users = $policy.conditions.users.excludeUsers
-
-                    # Test-CAIQConditionalAccessExclusion parameters
-                    $test_ca_params = @{}
-                    $test_ca_params["User"] = $user.id
-                    $test_ca_params["UserMemberOf"] = $member_of.id
-                    $test_ca_params["ExcludeGroups"] = $excluded_groups
-                    $test_ca_params["ExcludeUsers"] = $excluded_users
-
-                    #Testing if the user is excluded from the policy
-                    $is_excluded = Test-CAIQConditionalAccessUsersExclusion @test_ca_params
-                    
-                    #If the user is not excluded from the policy, then we add the policy object to the output list
-                    If (!$is_excluded) {
-                        #Adding the policy object to the output list
-                        $output_obj.Add($policy_obj)
-
-                    }
-                }
-            }
-        }
-        Catch {
+        } Catch {
+            Invoke-CAIQLogging -Message "Error during break glass assessment: $_" -ForegroundColor Red
             Write-Error -Message $_ -ErrorAction Stop
+        
+        }
+        
+        # Generate the HTML report
+        Invoke-CAIQLogging -Message "Generating HTML report" 
+        
+        Try {
 
+            # New-CAIQBreakGlassReport parameters
+            $report_params = @{}
+            $report_params["DataSet"] = $assessment_results
+            $report_params["OutputPath"] = $OutputPath
+            $report_params["Title"] = $Title
+            $report_params["FileName"] = $FileName
+            
+            # Generate the HTML report
+            $html_report = New-CAIQBreakGlassExclusionDashboard @report_params
+            Invoke-CAIQLogging -Message "HTML report generated successfully at: $($html_report.Path)" -ForegroundColor Green
+            
+
+        } Catch {
+            Invoke-CAIQLogging -Message "Error generating HTML report: $_" -ForegroundColor Red
+            Write-Error -Message $_ -ErrorAction Stop
+        
         }
     } End {
-        $output_obj
-
+        # Open the HTML report if specified
+        if ($invokeHtml) {
+            Invoke-Item $html_report.Path
+        
+        }
     }
 }
