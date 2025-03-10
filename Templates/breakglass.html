@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>{{TITLE}}</h1>
+        <div class="controls">
+            <h1>{{TITLE}}</h1>
+            <div class="actions">
+                <button id="exportCSV" class="btn">Export to CSV</button>
+                <div class="theme-toggle">
+                    <label for="darkModeToggle">Dark Mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
         <div class="tenant-info">Tenant: {{TENANT_NAME}}</div>
         
         <div class="summary-section">
