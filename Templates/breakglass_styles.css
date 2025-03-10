@@ -1,33 +1,166 @@
+/* Light/Dark Theme Variables */
+:root {
+    --bg-color: #f5f5f5;
+    --container-bg: #fff;
+    --text-color: #333;
+    --heading-color: #0066cc;
+    --card-bg: #f8f9fa;
+    --border-color: #ccc;
+    --link-color: #0066cc;
+    --tab-bg: #f1f1f1;
+    --tab-active-bg: #0066cc;
+    --tab-active-color: white;
+    --tab-hover: #ddd;
+    --recommendation-bg: #e8f4fd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --status-good: #4CAF50;
+    --status-warning: #FF9800;
+    --status-critical: #F44336;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --container-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --heading-color: #58a6ff;
+    --card-bg: #2d2d2d;
+    --border-color: #444;
+    --link-color: #58a6ff;
+    --tab-bg: #2d2d2d;
+    --tab-active-bg: #58a6ff;
+    --tab-active-color: #121212;
+    --tab-hover: #3d3d3d;
+    --recommendation-bg: #253047;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --status-good: #43a047;
+    --status-warning: #fb8c00;
+    --status-critical: #e53935;
+}
+
 body { 
     font-family: Arial, sans-serif; 
     line-height: 1.6; 
-    color: #333; 
+    color: var(--text-color); 
     margin: 0; 
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: var(--container-bg);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 h1, h2, h3 { 
-    color: #0066cc; 
+    color: var(--heading-color); 
     margin-top: 20px;
 }
 
+/* Controls Section */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.controls h1 {
+    margin: 0;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Toggle Switch */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.theme-toggle label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 28px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(32px);
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    background-color: var(--heading-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #0055aa;
+}
+
 .tenant-info {
-    background-color: #f8f9fa;
+    background-color: var(--card-bg);
     padding: 10px 15px;
     margin: 10px 0 20px;
     border-radius: 4px;
-    color: #666;
-    border-left: 4px solid #0066cc;
+    color: var(--text-color);
+    border-left: 4px solid var(--heading-color);
     font-weight: bold;
 }
 
@@ -46,24 +179,24 @@ h1, h2, h3 {
 .summary-card {
     flex: 1;
     min-width: 200px;
-    background-color: #f8f9fa;
+    background-color: var(--card-bg);
     border-radius: 8px;
     padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    border-top: 4px solid #0066cc;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    border-top: 4px solid var(--heading-color);
 }
 
 .summary-card h3 {
     margin-top: 0;
     font-size: 16px;
-    color: #555;
+    color: var(--text-color);
 }
 
 .summary-card p.count {
     font-size: 24px;
     font-weight: bold;
     margin: 10px 0;
-    color: #0066cc;
+    color: var(--heading-color);
 }
 
 .summary-card p.status-indicator {
@@ -73,34 +206,38 @@ h1, h2, h3 {
 }
 
 .status-good {
-    border-top-color: #4CAF50;
+    border-top-color: var(--status-good);
 }
 
 .status-good p.status-indicator {
-    color: #4CAF50;
+    color: var(--status-good);
 }
 
 .status-warning {
-    border-top-color: #FF9800;
+    border-top-color: var(--status-warning);
 }
 
 .status-warning p.status-indicator {
-    color: #FF9800;
+    color: var(--status-warning);
 }
 
 .status-critical {
-    border-top-color: #F44336;
+    border-top-color: var(--status-critical);
 }
 
 .status-critical p.status-indicator {
-    color: #F44336;
+    color: var(--status-critical);
 }
 
 /* Tabs */
+.tab-container {
+    margin-bottom: 30px;
+}
+
 .tab {
     overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
+    border: 1px solid var(--border-color);
+    background-color: var(--tab-bg);
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
@@ -114,25 +251,27 @@ h1, h2, h3 {
     padding: 14px 16px;
     transition: 0.3s;
     font-size: 14px;
+    color: var(--text-color);
 }
 
 .tab button:hover {
-    background-color: #ddd;
+    background-color: var(--tab-hover);
 }
 
 .tab button.active {
-    background-color: #0066cc;
-    color: white;
+    background-color: var(--tab-active-bg);
+    color: var(--tab-active-color);
 }
 
 .tabcontent {
     display: none;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-top: none;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     animation: fadeEffect 1s;
+    background-color: var(--container-bg);
 }
 
 @keyframes fadeEffect {
@@ -151,33 +290,35 @@ h1, h2, h3 {
 .policy-card {
     flex: 1;
     min-width: 300px;
-    background-color: #fff;
+    background-color: var(--container-bg);
     border-radius: 8px;
     padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-left: 4px solid #F44336;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    border-left: 4px solid var(--status-critical);
     transition: transform 0.2s;
 }
 
 .policy-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px var(--shadow-color);
 }
 
 .policy-card h3 {
     margin-top: 0;
     font-size: 16px;
-    color: #333;
+    color: var(--text-color);
 }
 
 .policy-card p {
     margin: 5px 0;
-    color: #666;
+    color: var(--text-color);
+    opacity: 0.8;
 }
 
 .policy-card .policy-id {
     font-size: 12px;
-    color: #888;
+    color: var(--text-color);
+    opacity: 0.6;
     margin-bottom: 10px;
 }
 
@@ -186,7 +327,7 @@ h1, h2, h3 {
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
-    background-color: #F44336;
+    background-color: var(--status-critical);
     color: white;
     margin-top: 10px;
 }
@@ -194,7 +335,7 @@ h1, h2, h3 {
 .policy-card a {
     display: block;
     margin-top: 10px;
-    color: #0066cc;
+    color: var(--link-color);
     text-decoration: none;
 }
 
@@ -204,7 +345,7 @@ h1, h2, h3 {
 
 /* Account Info */
 .account-info {
-    background-color: #f8f9fa;
+    background-color: var(--card-bg);
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 4px;
@@ -212,20 +353,21 @@ h1, h2, h3 {
 
 .account-info h3 {
     margin-top: 0;
-    color: #333;
+    color: var(--text-color);
 }
 
 .account-info p {
     margin: 5px 0;
+    color: var(--text-color);
 }
 
 /* Recommendations */
 .recommendations {
     margin-top: 40px;
-    background-color: #e8f4fd;
+    background-color: var(--recommendation-bg);
     padding: 20px;
     border-radius: 8px;
-    border-left: 4px solid #0066cc;
+    border-left: 4px solid var(--heading-color);
 }
 
 .recommendations h2 {
@@ -242,7 +384,7 @@ h1, h2, h3 {
 }
 
 .recommendations a {
-    color: #0066cc;
+    color: var(--link-color);
     text-decoration: none;
 }
 
@@ -253,7 +395,30 @@ h1, h2, h3 {
 .footer { 
     margin-top: 40px; 
     padding-top: 20px; 
-    border-top: 1px solid #ccc;
+    border-top: 1px solid var(--border-color);
     font-style: italic;
-    color: #777;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .summary-card {
+        min-width: 100%;
+    }
+    
+    .policy-card {
+        min-width: 100%;
+    }
 }
