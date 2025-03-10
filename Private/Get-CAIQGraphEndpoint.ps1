@@ -15,6 +15,8 @@ function Get-CAIQGraphEndpoint {
     #>
     [CmdletBinding()]
     [OutputType([System.String])]
+    param()
+    
     $context = Get-MgContext -ErrorAction Stop
 
     If($context) {
