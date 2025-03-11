@@ -30,7 +30,7 @@ Function Get-CAIQBreakGlassAssessment {
         [Alias("BG","BreakGlassAccount","Id","Upn")]
         [string[]]$Userid,
         [Parameter(Mandatory=$false)]
-        [string[]]$Select = ("Id","DisplayName","Description","State")
+        [string[]]$Select = ("Id","DisplayName","State")
     
     )
     Begin {
