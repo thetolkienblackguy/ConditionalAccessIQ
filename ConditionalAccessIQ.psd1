@@ -18,7 +18,7 @@
     RootModule          = "ConditionalAccessIQ.psm1"
     
     FunctionsToExport   = @(
-        "Invoke-CAIQ", "Send-CAIQMailMessage"
+        "Invoke-CAIQ", "Send-CAIQMailMessage", "Invoke-CAIQBreakGlassAssessment"
 
     )
     CmdletsToExport     = @()
