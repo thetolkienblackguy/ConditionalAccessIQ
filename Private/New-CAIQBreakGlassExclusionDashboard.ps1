@@ -37,9 +37,9 @@ Function New-CAIQBreakGlassExclusionDashboard {
         [Parameter(Mandatory=$true)]
         [string]$OutputPath,
         [Parameter(Mandatory=$false)]
-        [string]$Title = "Break Glass Account CA Policy Exclusion Report",
+        [string]$Title = "Break Glass Account CA Policy Exclusion Assessment",
         [Parameter(Mandatory=$false)]
-        [string]$FileName = "BreakGlass_ConditionalAccessIQ_Exclusion_Report.html"
+        [string]$FileName = "BreakGlass_ConditionalAccessIQ_Exclusion_Assessment.html"
     
     )
     Begin {
@@ -124,14 +124,6 @@ Function New-CAIQBreakGlassExclusionDashboard {
                     
                     } Else {
                         [void]$tab_content.AppendLine("<div class=`"policy-status`" style=`"background-color: #888;`">$($policy.State)</div>")
-                    
-                    }
-                    
-                    # Add description if it exists
-                    if ($policy.Description) {
-                        [void]$tab_content.AppendLine("<p>$($policy.Description)</p>")
-                    } Else {
-                        [void]$tab_content.AppendLine("<p><em>No description</em></p>")
                     
                     }
 
