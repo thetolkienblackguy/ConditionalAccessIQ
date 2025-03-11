@@ -49,9 +49,9 @@ Function Invoke-CAIQBreakGlassAssessment {
         [Parameter(Mandatory=$false)]
         [string]$OutputPath = "$($PWD)\ConditionalAccessIQ",
         [Parameter(Mandatory=$false)]
-        [string]$FileName = "BreakGlass_Assessment_Report.html",
+        [string]$FileName = "BreakGlass_CA_Policy_Exclusion_Assessment.html",
         [Parameter(Mandatory=$false)]
-        [string]$Title = "Break Glass CA Policy Exclusion Report",
+        [string]$Title = "Break Glass CA Policy Exclusion Assessment",
         [Parameter(Mandatory=$false)]
         [string]$Logfile = "$($outputPath)\Logs\Invoke-CAIQBreakGlassAssessment_$(Get-Date -Format "yyyy-MM-dd_HH-mm-ss").log",
         [Parameter(Mandatory=$false)]
