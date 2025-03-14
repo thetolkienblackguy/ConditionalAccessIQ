@@ -39,6 +39,7 @@ The module provides interactive HTML-based visualizations and assessments:
 - Provides links to quickly update policies in Entra portal
 
 ![Break Glass Assessment Dashboard](https://github.com/thetolkienblackguy/ConditionalAccessIQ/blob/main/Imgs/break_glass_assessment.png)
+![Break Glass Assessment Dashboard](https://github.com/thetolkienblackguy/ConditionalAccessIQ/blob/main/Imgs/break_glass_assessment_missing_exclusions.png)
 
 > **Version:** 0.1.0  
 > **Author:** Gabriel Delaney ([GitHub](https://github.com/thetolkienblackguy))  
