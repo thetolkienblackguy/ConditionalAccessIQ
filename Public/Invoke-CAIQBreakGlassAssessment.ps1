@@ -55,7 +55,7 @@ Function Invoke-CAIQBreakGlassAssessment {
         [Parameter(Mandatory=$false)]
         [string]$Logfile = "$($outputPath)\Logs\Invoke-CAIQBreakGlassAssessment_$(Get-Date -Format "yyyy-MM-dd_HH-mm-ss").log",
         [Parameter(Mandatory=$false)]
-        [switch]$InvokeHtml
+        [bool]$InvokeHtml = $true
     
     )
     Begin {
