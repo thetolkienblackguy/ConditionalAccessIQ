@@ -4,15 +4,18 @@
 [![PSGallery Platform](https://img.shields.io/powershellgallery/p/ConditionalAccessIQ)](https://www.powershellgallery.com/packages/ConditionalAccessIQ)
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/ConditionalAccessIQ)](https://www.powershellgallery.com/packages/ConditionalAccessIQ)
 
-Maintaining visibility into Conditional Access Policy changes in Microsoft Entra ID (formerly Azure AD) can be challenging. Whether tracking down who made a specific change, understanding what was modified, or maintaining documentation of policy evolution.
+ConditionalAccessIQ provides robust tools with simple, easy-to-use functions for monitoring Microsoft Entra ID (formerly Azure AD) Conditional Access policies. In its current form, the module addresses two specific needs:
 
-ConditionalAccessIQ streamlines this process by providing automatic version control, change tracking, and visual comparisons of your Conditional Access Policies. The tool enables administrators to continuously monitor for changes, maintains a detailed history of changes, and generates clear, interactive reports showing exactly what was modified, when, and by whom.
+1. **Change Tracking**: Identifying who made policy modifications, what was changed, and maintaining documentation of policy evolution
+2. **Break Glass Account Verification**: Ensuring emergency access accounts are properly excluded from Conditional Access policies
 
 - **Alpha Version**: This is a work in progress, while I have deployed this in to production environments, there may be some bugs and issues. Your feedback is important to me, please share any issues you find. The code was developed in a way to be able to dynamically adjust to new conditional access policies features that are released, however, that may not always be the case.
 
-## Report Previews
+> **Future Development**: While the module currently offers these two key functions, the plan is to add more capabilities in the future. If you have suggestions for additional features, please share them!
 
-Every policy change is documented with an interactive HTML report that shows:
+## Report & Assessment Capabilities
+
+The module provides interactive HTML-based visualizations and assessments:
 
 ### Change Comparison View
 
@@ -29,7 +32,15 @@ Every policy change is documented with an interactive HTML report that shows:
 
 ![Policy Information View](https://github.com/thetolkienblackguy/ConditionalAccessIQ/blob/main/Imgs/policy_information.png)
 
-> **Version:** 0.0.3  
+### Break Glass Assessment Dashboard
+
+- Shows which break glass accounts are excluded from Conditional Access policies
+- Identifies policies that don't have proper exclusions configured
+- Provides links to quickly update policies in Entra portal
+
+![Break Glass Assessment Dashboard](https://github.com/thetolkienblackguy/ConditionalAccessIQ/blob/main/Imgs/break_glass_assessment.png)
+
+> **Version:** 0.1.0  
 > **Author:** Gabriel Delaney ([GitHub](https://github.com/thetolkienblackguy))  
 > **Company:** Phoenix Horizons LLC  
 
@@ -40,20 +51,25 @@ Every policy change is documented with an interactive HTML report that shows:
 3. [Installation](#installation)
 4. [Authentication Setup](#authentication-setup)
 5. [Usage Guide](#usage-guide)
-6. [Sample Output](#sample-output)
-7. [Known Limitations](#known-limitations)
+6. [Known Limitations](#known-limitations)
 
 ## Features
 
-- 🔄 **Version Control**
+- 🔄 **Change Tracking & Version Control**
   - Policy version history
   - Automatic JSON backups
-  - Change comparison
-  - Audit trail tracking
+  - Side-by-side change comparison
+  - Detailed audit trail
 
-- 📊 **Change Visualization**
-  - Interactive HTML report
-  - Before/after comparisons
+- 🛡️ **Break Glass CA Policy Exclusion Verification**
+  - Policy exclusion checking
+  - Visual dashboard of exclusion status
+  - Account-by-policy matrix view
+  - Quick links to Entra portal for remediation
+
+- 📊 **Visual Reporting**
+  - Interactive HTML dashboards
+  - Property-level change visualization
   - Timeline tracking
   - Identity resolution
 
@@ -84,6 +100,7 @@ Every policy change is documented with an interactive HTML report that shows:
 - AuditLog.Read.All
 - Directory.Read.All
 - Application.Read.All
+- GroupMember.Read.All (required for break glass assessment)
 - Mail.Send (only if using email functionality)
 
 #### Role Requirements
@@ -96,7 +113,7 @@ When using delegated permissions (as opposed to application permissions), you ne
 
 ```powershell
 # Install from PowerShell Gallery
-Install-Module -Name ConditionalAccessIQ -Scope CurrentUser
+Install-Module -Name ConditionalAccessIQ -Scope CurrentUser -MinimumVersion 0.1.0
 
 # Import the module
 Import-Module ConditionalAccessIQ
@@ -112,7 +129,8 @@ Connect-MgGraph -Scopes @(
     "Policy.Read.All",
     "AuditLog.Read.All",
     "Directory.Read.All",
-    "Application.Read.All"
+    "Application.Read.All",
+    "GroupMember.Read.All"
 )
 ```
 
@@ -132,6 +150,7 @@ Connect-MgGraph -Scopes @(
      - AuditLog.Read.All (Application)
      - Directory.Read.All (Application)
      - Application.Read.All (Application)
+     - GroupMember.Read.All (Application)
      - Mail.Send (Application, if using email - see note below)
    - Grant admin consent
 
@@ -161,9 +180,9 @@ Connect-MgGraph -ClientId $client_id -CertificateThumbprint "cert-thumbprint" -T
 
 ## Usage Guide
 
-### Invoke-CAIQ
+### 1. Change Tracking
 
-Monitor and track Conditional Access policy changes:
+Use `Invoke-CAIQ` to track Conditional Access policy changes:
 
 ```powershell
 # Monitor changes for last 24 hours (default)
@@ -184,17 +203,38 @@ Invoke-CAIQ -FileName "CA_Changes_Report.html"
 Invoke-CAIQ -InvokeHtml:$false
 ```
 
-### Send-CAIQMailMessage
+### 2. Break Glass CA Policy Exclusion Verification
 
-Send email notifications about policy changes:
+Use `Invoke-CAIQBreakGlassAssessment` to verify emergency access accounts are properly excluded from Conditional Access policies:
 
 ```powershell
-Send-CAIQMailMessage -To "jdoe@contoso.com" -From "thetolkienblackguy@contoso.com" -Subject "Daily CA Changes Report" -Subject "CA Policy Changes" -Body "Please review the attached report." -Attachments "$($PWD)\ConditionalAccessIQ\CA_Changes_Report.html"
+# Check single break glass account
+Invoke-CAIQBreakGlassAssessment -UserId "breakglass@contoso.com"
+
+# Check multiple break glass accounts
+Invoke-CAIQBreakGlassAssessment -UserId "breakglass@contoso.com","emergency@contoso.com"
+
+# Custom output path
+Invoke-CAIQBreakGlassAssessment -UserId "breakglass@contoso.com" -OutputPath "C:\CAIQReports"
+
+# Custom report name
+Invoke-CAIQBreakGlassAssessment -UserId "breakglass@contoso.com" -FileName "BreakGlass_Assessment.html"
+
+# Generate without opening browser
+Invoke-CAIQBreakGlassAssessment -UserId "breakglass@contoso.com" -InvokeHtml:$false
 ```
 
-### Recommended Automation
+### 3. Email Notifications
 
-Since Conditional Access changes are critical to security, it's recommended to automate this tool to run daily. Here's an example PowerShell script you could schedule:
+Send reports to stakeholders using `Send-CAIQMailMessage`:
+
+```powershell
+Send-CAIQMailMessage -To "security@contoso.com" -From "caiq@contoso.com" -Subject "CA Policy Changes" -Body "Please review the attached report." -Attachments "$($PWD)\ConditionalAccessIQ\CA_Changes_Report.html"
+```
+
+## Automation Example
+
+Automating both policy change tracking and break glass exclusion verification:
 
 ```powershell
 # Install and import if needed
@@ -212,57 +252,71 @@ $html_path = "$($PWD)\ConditionalAccessIQ\Conditional_Access_Intelligence.html"
 # If the report exists get the content of it, if not, exit. 
 If ((Test-Path $html_path -PathType Leaf)) {
     $html = Get-Content -Path $html_path -Raw
-
-} Else {
-    Exit
+    
+    # Email the report
+    Send-CAIQMailMessage -To "jdoe@contoso.com" -From "thetolkienblackguy@contoso.com" -Subject "Daily CA Changes Report" -Body $html -Attachments $html_path
 
 }
 
-# Email the report
-Send-CAIQMailMessage -To "jdoe@contoso.com" -From "thetolkienblackguy@contoso.com" -Subject "Daily CA Changes Report" -Body $html -Attachments $html_path
+```
+
+```PowerShell
+# Run break glass assessment
+$bg_accounts = @("breakglass@contoso.com", "emergency@contoso.com")
+Invoke-CAIQBreakGlassAssessment -UserId $bg_accounts -InvokeHtml:$false
+
+# The break glass report path
+$bg_report_path = "$($PWD)\ConditionalAccessIQ\BreakGlass_CA_Policy_Exclusion_Assessment.html"
+
+# If the report exists get the content of it
+If ((Test-Path $bg_report_path -PathType Leaf)) {
+    $bg_html = Get-Content -Path $bg_report_path -Raw
+    
+    # Email the break glass assessment report
+    Send-CAIQMailMessage -To "jdoe@contoso.com" -From "thetolkienblackguy@contoso.com" -Subject "Break Glass CA Policy Assessment" -Body $bg_html -Attachments $bg_report_path
+}
 ```
 
 You can schedule this script using:
 
 - Windows Task Scheduler
-- Azure Automation  
+- Azure Automation
 
-## Sample Output
+## Output Formats
 
-The tool provides several output formats:
+ConditionalAccessIQ generates several output types:
 
 ### Interactive Reports
 
-- Policy change timeline
-- Visual before/after comparisons
-- Change highlighting
-- User and identity resolution
-- Version tracking
+- Policy change visualization with side-by-side comparison
+- Break glass exclusion verification dashboard
+- Visual indication of policies needing attention
+- Timeline of policy changes
 
-### JSON Backups
+### Policy Documentation
 
-- Automatic version backups
-- Full policy configurations
-- Restoration capability
-- Historical documentation
+- Automatic JSON backups of policy versions
+- Complete policy configurations
+- Version history with change details
+- Historical documentation for audit needs
 
-### HTML Reports
+### Change Records
 
-- Interactive timelines
-- Searchable changes
-- Detailed audit information
-- Email-ready format
+- Details on who made changes
+- When changes were made
+- Before and after policy state
+- Links to relevant audit logs
 
-### Audit Archives
+### Email Reports
 
-- Complete change history
-- User activity tracking
-- Modification timestamps
-- Service principal recording
+- HTML-formatted reports for review
+- Break glass exclusion status updates
+- Policy change notifications
+- Attachment support for offline viewing
 
 ## Known Limitations
 
-**Audit Log Access**
+### Audit Log Access
 
 - Limited to 30-day history
 - Regular monitoring recommended for complete history
