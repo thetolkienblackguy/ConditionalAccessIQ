@@ -101,7 +101,6 @@ The module provides interactive HTML-based visualizations and assessments:
 - AuditLog.Read.All
 - Directory.Read.All
 - Application.Read.All
-- GroupMember.Read.All (required for break glass assessment)
 - Mail.Send (only if using email functionality)
 
 #### Role Requirements
@@ -131,7 +130,6 @@ Connect-MgGraph -Scopes @(
     "AuditLog.Read.All",
     "Directory.Read.All",
     "Application.Read.All",
-    "GroupMember.Read.All"
 )
 ```
 
@@ -151,7 +149,6 @@ Connect-MgGraph -Scopes @(
      - AuditLog.Read.All (Application)
      - Directory.Read.All (Application)
      - Application.Read.All (Application)
-     - GroupMember.Read.All (Application)
      - Mail.Send (Application, if using email - see note below)
    - Grant admin consent
 
