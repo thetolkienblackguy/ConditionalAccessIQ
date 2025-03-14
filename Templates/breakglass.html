@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TITLE}}</title>
+    {{STYLES}}
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>{{TITLE}}</h1>
+            <div class="actions">
+                <button id="exportCSV" class="btn">Export to CSV</button>
+                <div class="theme-toggle">
+                    <label for="darkModeToggle">Dark Mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tenant-info">Tenant: {{TENANT_NAME}}</div>
+        
+        <div class="summary-section">
+            <h2>Summary</h2>
+            <div class="summary-cards">
+                <div class="summary-card {{OVERALL_STATUS_CLASS}}">
+                    <h3>Overall Status</h3>
+                    <p class="status-indicator">{{OVERALL_STATUS}}</p>
+                    <p>{{SUMMARY_TEXT}}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Policies Checked</h3>
+                    <p class="count">{{TOTAL_POLICIES}}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Break Glass Accounts</h3>
+                    <p class="count">{{TOTAL_ACCOUNTS}}</p>
+                </div>
+                <div class="summary-card {{ISSUES_CLASS}}">
+                    <h3>Issues Found</h3>
+                    <p class="count">{{TOTAL_ISSUES}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab">
+                {{TAB_BUTTONS}}
+            </div>
+            
+            {{TAB_CONTENT}}
+        </div>
+        
+        <div class="recommendations">
+            <h2>Recommendations</h2>
+            <ul>
+                <li>Break glass accounts should be excluded from <strong>all</strong> Conditional Access policies to ensure they can be used during emergencies.</li>
+                <li>Use either direct user exclusion or group exclusion (preferred) for all break glass accounts.</li>
+                <li>Review the Microsoft recommendations for <a href="https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/security-emergency-access" target="_blank">emergency access accounts</a>.</li>
+            </ul>
+        </div>
+
+        {{FOOTER}}
+    </div>
+    {{SCRIPTS}}
+</body>
+</html>

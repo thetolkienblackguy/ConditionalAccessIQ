@@ -1,6 +1,6 @@
 @{
     # Module metadata
-    ModuleVersion       = "0.0.3"
+    ModuleVersion       = "0.1.0"
     GUID                = "ae965c65-34a1-4e08-b34a-95dd363eaeb5"
     Author              = "Gabriel Delaney - gdelaney@phzconsulting.com | https://github.com/thetolkienblackguy"
     CompanyName         = "Phoenix Horizons LLC"
@@ -18,7 +18,7 @@
     RootModule          = "ConditionalAccessIQ.psm1"
     
     FunctionsToExport   = @(
-        "Invoke-CAIQ", "Send-CAIQMailMessage"
+        "Invoke-CAIQ", "Send-CAIQMailMessage", "Invoke-CAIQBreakGlassAssessment"
 
     )
     CmdletsToExport     = @()
