@@ -1,5 +1,7 @@
 # ConditionalAccessIQ
 
+![CAIQ Logo](https://github.com/thetolkienblackguy/ConditionalAccessIQ/blob/main/Imgs/caiq_logo.png)
+
 [![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/ConditionalAccessIQ)](https://www.powershellgallery.com/packages/ConditionalAccessIQ)
 [![PSGallery Platform](https://img.shields.io/powershellgallery/p/ConditionalAccessIQ)](https://www.powershellgallery.com/packages/ConditionalAccessIQ)
 [![PowerShell Gallery](https://img.shields.io/powershellgallery/dt/ConditionalAccessIQ)](https://www.powershellgallery.com/packages/ConditionalAccessIQ)
